@@ -1,0 +1,17 @@
+- name: Get PGSQL version
+  become: false
+  command: psql --version
+  changed_when: no
+  check_mode: no
+  register: pgsql_version_check
+  tags:
+    - always
+
+- name: Set PGSQL version
+  set_fact:
+    pgsql_version: "{{ pgsql_version_check['stdout'] | pgsql_version_string }}"
+  tags:
+    - always
+  
+- debug:
+    msg: "{{ pgsql_version_check }} --- {{ pgsql_version }}"

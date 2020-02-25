@@ -1,0 +1,8 @@
+#edit-here - removed pgsql version checl. 
+#            manually added version info in main variable list
+#- import_tasks: pgsql_version.yml
+#  tags:
+#    - always
+
+- include_tasks: "{{ pgsqlrep_role }}.yml"
+  when: pgsqlrep_role != 'skip'
