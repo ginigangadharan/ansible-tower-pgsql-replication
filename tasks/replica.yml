@@ -17,18 +17,13 @@
     owner: postgres
     group: postgres
     mode: '0700'
-- name: check
-  debug:
-    msg: "{{ pgsql_bin_path }}/pg_basebackup -X stream -D {{ pgsqlrep_data_path }} -h {{ pgsqlrep_master_address }} -U {{ pgsqlrep_user }}"
+
 - name: Create base backup
-  # edit-here added bin path
-  command: "pg_basebackup -X stream -D {{ pgsqlrep_data_path }} -h {{ pgsqlrep_master_address }} -U {{ pgsqlrep_user }}"
+  # edit-here added become_flags: 'su - postgres -c' also make sure ansible version is not 2.9.4 (yet to confirm this)
+  shell: "pg_basebackup -X stream -D {{ pgsqlrep_data_path }} -h {{ pgsqlrep_master_address }} -U {{ pgsqlrep_user }}"
   become: yes
   become_user: postgres
-  # edit-here added chdir
-  #args:
-  #  chdir: "{{ pgsql_bin_path }}"
-
+  become_flags: 'su - postgres -c'
 
 - name: Create recovery.conf
   template:
